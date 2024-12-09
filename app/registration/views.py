@@ -1,5 +1,6 @@
 from django.shortcuts import redirect, render
 from django.contrib import messages
+from django.db import connection
 
 def registration(request):
     if request.method == 'POST':
@@ -11,6 +12,13 @@ def registration(request):
             messages.error(request, "All fields are required")
             return render(request, 'registration.html')
         
+        with connection.cursor() as cursor:
+            query = "SELECT * FROM users WHERE email = %s"
+            cursor.execute(query,(email,))
+            data = cursor.fetchone()
+            print(data)
+        
+        print(name, email, password)
 
     
     return render(request, 'registration.html')
