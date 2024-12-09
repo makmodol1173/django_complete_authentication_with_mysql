@@ -1,0 +1,17 @@
+body {
+  margin: 0;
+  font-family: 'Times New Roman', Times, serif;
+  height: 100vh;
+  background: url('../image/backgrnd.jpeg') no-repeat center center fixed;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 65px;
+}
