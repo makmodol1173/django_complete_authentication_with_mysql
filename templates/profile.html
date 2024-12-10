@@ -10,22 +10,24 @@
     <div class="container">
         <h2>Welcome, {{ name }}</h2>
         <p><strong>Email:</strong> {{ email }}</p> 
-        <a class="button" href="/logout">Log Out</a>
+        <a class="button" href="/profile/logout">Log Out</a>
     </div>
     
     <div class="container">
-        <h3>Change Password</h3> <br>
+        <h3>Change Password</h3>
+        <form method="POST" action="/profile/change-password/"> 
+            {% csrf_token %}
             <div class="form-group">
                 <label for="currentPassword">Current Password:</label>
-                <input type="password" id="currentPassword" name="current_password" required>
+                <input type="password" id="currentPassword" name="current_password" >
             </div>
             <div class="form-group">
                 <label for="newPassword">New Password:</label>
-                <input type="password" id="newPassword" name="new_password" required>
+                <input type="password" id="newPassword" name="new_password" >
             </div>
             <div class="form-group">
                 <label for="confirmPassword">Confirm New Password:</label>
-                <input type="password" id="confirmPassword" name="confirm_password" required>
+                <input type="password" id="confirmPassword" name="confirm_password" >
             </div>
             <button type="submit" class="button">Update Password</button>
         </form>
@@ -36,7 +38,7 @@
         <div class="profile-picture-container">
             <img src="/static/image/image.png" class="profile-picture" id="profile-picture-preview">
         </div>
-        <form method="POST" action="/upload_picture/" enctype="multipart/form-data">
+        <form method="POST" action="/upload-picture/" enctype="multipart/form-data">
             <input type="file" id="profile-picture-input" name="profile_picture" accept="image/*" style="display: none;" onchange="previewImage(event)">
             <button type="button" class="select-button" onclick="triggerFileInput()">Select Picture</button>
             <button type="submit" class="upload-button">Upload Picture</button>
