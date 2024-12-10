@@ -10,7 +10,9 @@
     <div class="container">
         <h2>Welcome, {{ name }}</h2>
         <p><strong>Email:</strong> {{ email }}</p> 
-        <a class="button" href="/profile/logout">Log Out</a>
+        {% if role == 'admin' %}
+            <a class="button" href="/profile/logout">Log Out</a>
+        {% endif %}
     </div>
     
     <div class="container">

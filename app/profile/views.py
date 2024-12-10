@@ -14,7 +14,7 @@ def profile(request):
         query = "SELECT * FROM users WHERE email = %s"
         cursor.execute(query,(auth_token,))
         data = cursor.fetchone()
-        user = {'name':data[1], 'email': data[2]}
+        user = {'name':data[1], 'email': data[2], 'role':data[4]}
     return render(request, 'profile.html',user)
 
 
@@ -30,7 +30,7 @@ def change_password(request):
         query = "SELECT * FROM users WHERE email = %s"
         cursor.execute(query,(auth_token,))
         data = cursor.fetchone()
-        user = {'name':data[1], 'email': data[2]}
+        user = {'name':data[1], 'email': data[2], 'role':data[4]}
 
     if request.method == 'POST':
         current_password = request.POST.get("current_password")
@@ -60,6 +60,19 @@ def change_password(request):
     return render(request, 'profile.html',user)
 
 def logout(request):
-    response = redirect('/login')
-    response.delete_cookie('auth_token')
-    return response
+    auth_token = request.COOKIES.get(config('COOKIE_KEY'))
+    if not auth_token:
+        return redirect('/login')
+    
+    with connection.cursor() as cursor:
+        query = "SELECT * FROM users WHERE email = %s"
+        cursor.execute(query,(auth_token,))
+        data = cursor.fetchone()
+        user = {'name':data[1], 'email': data[2], 'role':data[4]}
+        
+        if data[4]=='admin':
+            response = redirect('/login')
+            response.delete_cookie('auth_token')
+            return response
+    return redirect('/profile')
+ 
