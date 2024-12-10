@@ -36,8 +36,5 @@ def registration(request):
             response = redirect("/profile")
             response.set_cookie(config('COOKIE_KEY'), email, max_age=3600, httponly=True, secure=True)
             return response
-        
-        print(name, email, password)
-
     
     return render(request, 'registration.html')
