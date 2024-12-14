@@ -17,7 +17,7 @@ def profile(request):
         query = "SELECT * FROM users WHERE email = %s"
         cursor.execute(query,(auth_token,))
         data = cursor.fetchone()
-        user = {'name':data[1], 'email': data[2], 'role':data[4]}
+        user = {'name':data[1], 'email': data[2], 'role':data[4], 'profile_picture': data[5]}
     return render(request, 'profile.html',user)
 
 
@@ -33,7 +33,7 @@ def change_password(request):
         query = "SELECT * FROM users WHERE email = %s"
         cursor.execute(query,(auth_token,))
         data = cursor.fetchone()
-        user = {'name':data[1], 'email': data[2], 'role':data[4]}
+        user = {'name':data[1], 'email': data[2], 'role':data[4], 'profile_picture': data[5]}
 
     if request.method == 'POST':
         current_password = request.POST.get("current_password")
@@ -71,7 +71,6 @@ def logout(request):
         query = "SELECT * FROM users WHERE email = %s"
         cursor.execute(query,(auth_token,))
         data = cursor.fetchone()
-        user = {'name':data[1], 'email': data[2], 'role':data[4]}
         
         if data[4]=='admin':
             response = redirect('/login')
@@ -92,8 +91,8 @@ def upload_picture(request):
     with connection.cursor() as cursor:
         query = "SELECT * FROM users WHERE email = %s"
         cursor.execute(query,(auth_token,))
-        user = cursor.fetchone() 
-        data = {'name':user[1], 'email': user[2], 'role':user[4], 'profile_picture':user[5]}
+        data = cursor.fetchone() 
+        user = {'name':data[1], 'email': data[2], 'role':data[4], 'profile_picture': data[5]}
         
         if not user:
            return redirect('/login') 
@@ -101,7 +100,7 @@ def upload_picture(request):
         fs = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'profile_picture'))
         filename = fs.save(uploaded_file.name, uploaded_file)
         update_query = "UPDATE users SET profile_picture = %s WHERE id = %s"
-        cursor.execute(update_query, (uploaded_file.name, user[0]))
+        cursor.execute(update_query, (uploaded_file.name, data[0]))
         connection.commit()
         
-        return render(request, 'profile.html', data) 
+        return render(request, 'profile.html', user) 

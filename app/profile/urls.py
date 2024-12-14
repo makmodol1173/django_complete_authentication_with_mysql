@@ -1,5 +1,3 @@
-from django.conf import settings
-from django.conf.urls.static import static
 from django.urls import path
 from . import views
 
@@ -8,4 +6,4 @@ urlpatterns = [
     path('change-password/', views.change_password, name='change-password'),
     path('logout/', views.logout, name='logout'),
     path('upload-picture/', views.upload_picture, name='upload_picture'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]

@@ -38,7 +38,11 @@
     <div class="container">
         <h3>Upload Profile Picture</h3>
         <div class="profile-picture-container">
-            <img src="/static/image/image.png" class="profile-picture" id="profile-picture-preview" alt="Profile Picture Preview">
+            {% if profile_picture %}
+                <img src="http://127.0.0.1:8000/media/profile_picture/{{ profile_picture }}" class="profile-picture" id="profile-picture-preview" alt="Profile Picture Preview">
+            {% else %}
+                <img src="/static/image/image.png" class="profile-picture" id="profile-picture-preview" alt="Profile Picture Preview">
+            {% endif %}
         </div>
         <form method="POST" action="/profile/upload-picture/" enctype="multipart/form-data">
             {% csrf_token %}
