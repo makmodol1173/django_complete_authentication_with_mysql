@@ -10,5 +10,7 @@ CREATE TABLE IF NOT EXISTS users (
     name VARCHAR(255) NOT NULL,                -- Name cannot be null
     email VARCHAR(255) NOT NULL UNIQUE,        -- Email must be unique and cannot be null
     password VARCHAR(255) NOT NULL,            -- Password cannot be null
-    role VARCHAR(50) NOT NULL                  -- Role cannot be null
+    role VARCHAR(50) NOT NULL,                  -- Role cannot be null
+    profile_picture VARCHAR(100);
+
 );
