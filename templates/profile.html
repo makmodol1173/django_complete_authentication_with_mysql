@@ -38,9 +38,10 @@
     <div class="container">
         <h3>Upload Profile Picture</h3>
         <div class="profile-picture-container">
-            <img src="/static/image/image.png" class="profile-picture" id="profile-picture-preview">
+            <img src="/static/image/image.png" class="profile-picture" id="profile-picture-preview" alt="Profile Picture Preview">
         </div>
-        <form method="POST" action="/upload-picture/" enctype="multipart/form-data">
+        <form method="POST" action="/profile/upload-picture/" enctype="multipart/form-data">
+            {% csrf_token %}
             <input type="file" id="profile-picture-input" name="profile_picture" accept="image/*" style="display: none;" onchange="previewImage(event)">
             <button type="button" class="select-button" onclick="triggerFileInput()">Select Picture</button>
             <button type="submit" class="upload-button">Upload Picture</button>

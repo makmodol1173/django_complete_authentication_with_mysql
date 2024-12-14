@@ -1,8 +1,11 @@
 from django.shortcuts import render, redirect
+from django.core.files.storage import FileSystemStorage
 from django.contrib import messages
 from django.db import connection
+from django.conf import settings
 from decouple import config
 import bcrypt
+import os
 
 def profile(request):
     
@@ -75,4 +78,30 @@ def logout(request):
             response.delete_cookie('auth_token')
             return response
     return redirect('/profile')
- 
+
+def upload_picture(request):
+    # if request.method == 'POST' and request.FILES.get('profile_picture'):
+    auth_token = request.COOKIES.get(config('COOKIE_KEY'))
+    
+    if not auth_token:
+        return redirect('/login') 
+    
+    if request.method == 'GET':
+        return redirect('/profile')
+    
+    with connection.cursor() as cursor:
+        query = "SELECT * FROM users WHERE email = %s"
+        cursor.execute(query,(auth_token,))
+        user = cursor.fetchone() 
+        data = {'name':user[1], 'email': user[2], 'role':user[4], 'profile_picture':user[5]}
+        
+        if not user:
+           return redirect('/login') 
+        uploaded_file = request.FILES['profile_picture']
+        fs = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'profile_picture'))
+        filename = fs.save(uploaded_file.name, uploaded_file)
+        update_query = "UPDATE users SET profile_picture = %s WHERE id = %s"
+        cursor.execute(update_query, (uploaded_file.name, user[0]))
+        connection.commit()
+        
+        return render(request, 'profile.html', data) 
