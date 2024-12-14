@@ -103,4 +103,6 @@ def upload_picture(request):
         cursor.execute(update_query, (uploaded_file.name, data[0]))
         connection.commit()
         
+        user['profile_picture']=uploaded_file.name
+        
         return render(request, 'profile.html', user) 
